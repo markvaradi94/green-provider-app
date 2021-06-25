@@ -31,6 +31,45 @@ class ProviderAccountService(
         )
     }
 
+    fun createProviderAccountForNewProvider(providerId: String, accountId: String): ProviderAccountEntity {
+        val account = accountApiClient.getAccount(accountId)
+            .orElseThrow { ResourceNotFoundException("Could not find account with id $accountId") }
+        val provider = providerApiClient.getProvider(providerId)
+            .orElseThrow { ResourceNotFoundException("Could not find provider with id $providerId") }
+
+        val newProviderAccount = ProviderAccountEntity(
+            providerId = provider.id!!,
+            accountId = account.id!!,
+            username = account.username,
+            email = account.username,
+            phoneNumber = account.phoneNumber
+        )
+
+        return repository.save(newProviderAccount)
+    }
+
+    fun editForAccountChange(accountId: String, editedAccount: Account): ProviderAccountEntity {
+        val providerAccount = findProviderAccountByAccountId(accountId)
+        providerAccount.email = editedAccount.email
+        providerAccount.phoneNumber = editedAccount.phoneNumber
+        providerAccount.username = editedAccount.username
+        return repository.save(providerAccount)
+    }
+
+    fun editForProviderChange(providerId: String, editedProvider: Provider): ProviderAccountEntity {
+        val providerAccount = findProviderAccountByProviderId(providerId)
+        editedProvider.address
+        editedProvider.dashboard
+        //TODO figure out if we need any provider specific details in provider_account
+        return providerAccount
+    }
+
+    fun deleteForProvider(providerId: String): ProviderAccountEntity {
+        val providerAccountToDelete = findProviderAccountByProviderId(providerId)
+        repository.delete(providerAccountToDelete)
+        return providerAccountToDelete
+    }
+
     fun findProviderAccountByAccountId(accountId: String): ProviderAccountEntity =
         repository.findByAccountId(accountId)
             .orElseThrow { ResourceNotFoundException("Could not find provider account for provider with id $accountId") }
