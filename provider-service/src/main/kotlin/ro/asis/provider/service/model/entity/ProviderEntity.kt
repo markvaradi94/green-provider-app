@@ -1,5 +1,8 @@
 package ro.asis.provider.service.model.entity
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -16,8 +19,12 @@ class ProviderEntity(
     var accountId: String,
     var name: String,
     var description: String,
+
+    @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     var since: LocalDate,
-    var inventory: Inventory = Inventory(),
-    var address: Address = Address(),
-    var dashboard: Dashboard = Dashboard()
+
+    var inventory: Inventory,
+    var address: Address,
+    var dashboard: Dashboard,
 )
