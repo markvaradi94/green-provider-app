@@ -14,7 +14,7 @@ import java.time.LocalDate
 @Document(collection = "providers")
 class ProviderEntity(
     @Id
-    var id: String? = ObjectId.get().toHexString(),
+    var id: String = ObjectId.get().toHexString(),
 
     var accountId: String,
     var name: String,

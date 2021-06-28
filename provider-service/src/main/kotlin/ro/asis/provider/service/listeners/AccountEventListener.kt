@@ -3,9 +3,9 @@ package ro.asis.provider.service.listeners
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.stereotype.Component
-import ro.asis.account.events.AccountCreationEvent
-import ro.asis.account.events.AccountDeletionEvent
-import ro.asis.account.events.AccountEditEvent
+import ro.asis.account.events.AccountCreatedEvent
+import ro.asis.account.events.AccountDeletedEvent
+import ro.asis.account.events.AccountModifiedEvent
 import ro.asis.commons.enums.AccountType.PROVIDER
 import ro.asis.commons.enums.EventType.*
 import ro.asis.provider.service.model.entity.ProviderEntity
@@ -22,30 +22,30 @@ class AccountEventListener(
     }
 
     @RabbitListener(queues = ["#{newAccountQueue.name}"])
-    fun processNewAccountCreation(event: AccountCreationEvent) = callProviderCreationForAccount(event)
+    fun processNewAccountCreation(event: AccountCreatedEvent) = callProviderCreationForAccount(event)
 
     @RabbitListener(queues = ["#{deleteAccountQueue.name}"])
-    fun processAccountDeletion(event: AccountDeletionEvent) = callProviderDeletionForAccount(event)
+    fun processAccountDeletion(event: AccountDeletedEvent) = callProviderDeletionForAccount(event)
 
     @RabbitListener(queues = ["#{editAccountQueue.name}"])
-    fun processAccountEdit(event: AccountEditEvent) = callProviderEditForAccount(event)
+    fun processAccountEdit(event: AccountModifiedEvent) = callProviderEditForAccount(event)
 
-    private fun callProviderCreationForAccount(event: AccountCreationEvent) {
-        if (event.accountType == PROVIDER && event.eventType == CREATED) {
+    private fun callProviderCreationForAccount(event: AccountCreatedEvent) {
+        if (event.accountType == PROVIDER && event.eventType == CREATE) {
             LOG.info("Creating provider for account with id ${event.accountId}")
             providerService.createProviderForNewAccount(event.accountId)
         }
     }
 
-    private fun callProviderDeletionForAccount(event: AccountDeletionEvent) {
-        if (event.accountType == PROVIDER && event.eventType == DELETED) {
+    private fun callProviderDeletionForAccount(event: AccountDeletedEvent) {
+        if (event.accountType == PROVIDER && event.eventType == DELETE) {
             LOG.info("Deleting provider for account with id ${event.accountId}")
             providerService.deleteProviderForAccount(event.accountId)
         }
     }
 
-    private fun callProviderEditForAccount(event: AccountEditEvent) {
-        if (event.accountType == PROVIDER && event.eventType == MODIFIED) {
+    private fun callProviderEditForAccount(event: AccountModifiedEvent) {
+        if (event.accountType == PROVIDER && event.eventType == MODIFY) {
             LOG.info("Provider account was edited for account with id ${event.accountId}")
             LOG.info("$event")
             providerAccountService.editForAccountChange(event.accountId, event.editedAccount)

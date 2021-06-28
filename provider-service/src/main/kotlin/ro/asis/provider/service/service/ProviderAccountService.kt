@@ -22,8 +22,8 @@ class ProviderAccountService(
             .orElseThrow { ResourceNotFoundException("Could not find account with id ${provider.accountId}") }
         return repository.save(
             ProviderAccountEntity(
-                providerId = provider.id!!,
-                accountId = account.id!!,
+                providerId = provider.id,
+                accountId = account.id,
                 username = account.username,
                 email = account.email,
                 phoneNumber = account.phoneNumber
@@ -38,10 +38,10 @@ class ProviderAccountService(
             .orElseThrow { ResourceNotFoundException("Could not find provider with id $providerId") }
 
         val newProviderAccount = ProviderAccountEntity(
-            providerId = provider.id!!,
-            accountId = account.id!!,
+            providerId = provider.id,
+            accountId = account.id,
             username = account.username,
-            email = account.username,
+            email = account.email,
             phoneNumber = account.phoneNumber
         )
 
@@ -79,7 +79,7 @@ class ProviderAccountService(
             .orElseThrow { ResourceNotFoundException("Could not find provider account for provider with id $providerId") }
 
     fun findProviderAccountByProvider(provider: ProviderEntity): ProviderAccountEntity =
-        repository.findByProviderId(provider.id!!)
+        repository.findByProviderId(provider.id)
             .orElseThrow {
                 ResourceNotFoundException("Could not find provider account for provider with id ${provider.id}")
             }

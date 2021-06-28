@@ -71,14 +71,10 @@ class ProviderService(
     fun createProviderForNewAccount(accountId: String): ProviderEntity {
         val newProvider = ProviderEntity(
             accountId = accountId,
-            name = "new provider",
-            description = "new after account creation",
+            name = "",
+            description = "",
             since = LocalDate.now(),
-            address = Address(
-                city = "new city",
-                streetName = "new street",
-                streetNumber = "new number"
-            ),
+            address = Address(),
             inventory = Inventory(),
             dashboard = Dashboard()
         )

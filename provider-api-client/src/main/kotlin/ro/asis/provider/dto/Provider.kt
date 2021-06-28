@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
+import org.bson.types.ObjectId
 import ro.asis.commons.model.Address
 import ro.asis.commons.model.Dashboard
 import ro.asis.commons.model.Inventory
@@ -11,7 +12,7 @@ import java.time.LocalDate
 
 data class Provider(
     @JsonProperty("id")
-    val id: String?,
+    val id: String = ObjectId.get().toHexString(),
 
     @JsonProperty("accountId")
     val accountId: String,

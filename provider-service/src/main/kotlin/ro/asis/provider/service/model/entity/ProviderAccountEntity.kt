@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "provider_accounts")
 class ProviderAccountEntity(
     @Id
-    var id: String? = ObjectId.get().toHexString(),
+    var id: String = ObjectId.get().toHexString(),
 
     var providerId: String,
     var accountId: String,

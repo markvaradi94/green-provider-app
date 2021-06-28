@@ -57,10 +57,10 @@ class ProviderValidator(
 
     private fun addressIsInvalid(address: Address): Optional<ValidationException> {
         return when (true) {
-            address.city.isBlank() -> of(ValidationException("City must be valid"))
-            address.streetName.isBlank() -> of(ValidationException("Street name must be valid"))
-            address.streetNumber.isBlank() -> of(ValidationException("Street number must be valid"))
-            address.zipCode.isNullOrBlank() -> of(ValidationException("Zipcode must be valid"))
+            address.city?.isBlank() -> of(ValidationException("City must be valid"))
+            address.streetName?.isBlank() -> of(ValidationException("Street name must be valid"))
+            address.streetNumber?.isBlank() -> of(ValidationException("Street number must be valid"))
+            address.zipCode?.isBlank() -> of(ValidationException("Zipcode must be valid"))
             else -> empty()
         }
     }
