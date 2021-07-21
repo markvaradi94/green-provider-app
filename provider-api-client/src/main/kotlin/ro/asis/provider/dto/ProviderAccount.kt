@@ -30,9 +30,6 @@ data class ProviderAccount(
     @JsonProperty("address")
     var address: Address,
 
-    @JsonProperty("username")
-    var username: String,
-
     @JsonProperty("email")
     var email: String,
 

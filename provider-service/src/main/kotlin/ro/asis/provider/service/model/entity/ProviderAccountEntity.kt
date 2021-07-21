@@ -11,7 +11,6 @@ class ProviderAccountEntity(
 
     var providerId: String,
     var accountId: String,
-    var username: String,
     var email: String,
     var phoneNumber: String
 )

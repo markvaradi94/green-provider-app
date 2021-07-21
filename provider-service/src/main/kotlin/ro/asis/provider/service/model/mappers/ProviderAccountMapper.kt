@@ -20,7 +20,6 @@ class ProviderAccountMapper(
             name = provider.name,
             since = provider.since,
             address = provider.address,
-            username = account.username,
             email = account.email,
             phoneNumber = account.phoneNumber,
             type = account.type
@@ -32,7 +31,6 @@ class ProviderAccountMapper(
             id = source.id,
             providerId = source.providerId,
             accountId = source.accountId,
-            username = source.username,
             email = source.email,
             phoneNumber = source.phoneNumber
         )

@@ -24,7 +24,6 @@ class ProviderAccountService(
             ProviderAccountEntity(
                 providerId = provider.id,
                 accountId = account.id,
-                username = account.username,
                 email = account.email,
                 phoneNumber = account.phoneNumber
             )
@@ -40,7 +39,6 @@ class ProviderAccountService(
         val newProviderAccount = ProviderAccountEntity(
             providerId = provider.id,
             accountId = account.id,
-            username = account.username,
             email = account.email,
             phoneNumber = account.phoneNumber
         )
@@ -52,7 +50,6 @@ class ProviderAccountService(
         val providerAccount = findProviderAccountByAccountId(accountId)
         providerAccount.email = editedAccount.email
         providerAccount.phoneNumber = editedAccount.phoneNumber
-        providerAccount.username = editedAccount.username
         return repository.save(providerAccount)
     }
 
