@@ -25,7 +25,8 @@ class ProviderController(
     }
 
     @GetMapping
-    fun getAllProviders(filters: ProviderFilters): List<Provider> = providerMapper.toApi(service.findAllProviders(filters))
+    fun getAllProviders(filters: ProviderFilters): List<Provider> =
+        providerMapper.toApi(service.findAllProviders(filters))
 
     @GetMapping("{providerId}")
     fun getProvider(@PathVariable providerId: String): Provider = service.findProvider(providerId)

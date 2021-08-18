@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository
 import ro.asis.commons.filters.ProviderFilters
 import ro.asis.provider.service.model.entity.ProviderEntity
 import java.util.*
+import java.util.Optional.ofNullable
 
 @Repository
 class ProviderDao(private val mongo: MongoTemplate) {
@@ -22,14 +23,16 @@ class ProviderDao(private val mongo: MongoTemplate) {
     private fun buildCriteria(filters: ProviderFilters): List<Criteria> {
         val criteria = mutableListOf<Criteria>()
 
-        Optional.ofNullable(filters.id)
+        ofNullable(filters.id)
             .ifPresent { criteria.add(Criteria.where("id").`is`(it)) }
-        Optional.ofNullable(filters.name)
+        ofNullable(filters.name)
             .ifPresent { criteria.add(Criteria.where("name").regex(".*$it.*", "i")) }
-        Optional.ofNullable(filters.city)
+        ofNullable(filters.city)
             .ifPresent { criteria.add(Criteria.where("address.city").regex(".*$it.*", "i")) }
-        Optional.ofNullable(filters.streetName)
+        ofNullable(filters.streetName)
             .ifPresent { criteria.add(Criteria.where("address.streetName").regex(".*$it.*", "i")) }
+        ofNullable(filters.accountId)
+            .ifPresent { criteria.add(Criteria.where("accountId").`is`(it)) }
 
         return criteria
     }
