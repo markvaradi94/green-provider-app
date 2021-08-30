@@ -9,6 +9,8 @@ import ro.asis.commons.filters.ProviderFilters
 import ro.asis.commons.model.Address
 import ro.asis.commons.model.Dashboard
 import ro.asis.commons.model.Inventory
+import ro.asis.commons.model.Order
+import ro.asis.order.client.OrderApiClient
 import ro.asis.provider.service.model.entity.ProviderAccountEntity
 import ro.asis.provider.service.model.entity.ProviderEntity
 import ro.asis.provider.service.repository.ProviderDao
@@ -22,6 +24,7 @@ class ProviderService(
     private val dao: ProviderDao,
     private val mapper: ObjectMapper,
     private val validator: ProviderValidator,
+    private val orderApiClient: OrderApiClient,
     private val repository: ProviderRepository,
     private val providerAccountService: ProviderAccountService,
     private val notificationsService: ProviderNotificationsService
@@ -89,6 +92,33 @@ class ProviderService(
         providerToDelete.ifPresent { deleteExistingProvider(it) }
         return providerToDelete
             .orElseThrow { ResourceNotFoundException("Could not find provider for account $accountId") }
+    }
+
+    fun addOrderToProviderDashboard(providerId: String, orderId: String): ProviderEntity {
+        val providerToModify = getOrThrow(providerId)
+        val orderToAdd = orderApiClient.getOrder(orderId)
+            .orElseThrow { ResourceNotFoundException("Could not find order with id $orderId") }
+
+        providerToModify.dashboard.orders.add(orderToAdd)
+        return repository.save(providerToModify)
+    }
+
+    fun removeOrderFromProviderDashboard(orderId: String): ProviderEntity {
+        val orderToRemove = orderApiClient.getOrder(orderId)
+            .orElseThrow { ResourceNotFoundException("Could not find order with id $orderId") }
+        val providerToModify = getOrThrow(orderToRemove.providerId)
+
+        providerToModify.dashboard.orders.remove(orderToRemove)
+        return repository.save(providerToModify)
+    }
+
+    fun editOrderFromProviderDashboard(providerId: String, editedOrder: Order): ProviderEntity {
+        val providerToModify = getOrThrow(providerId)
+        val orderToEdit = orderApiClient.getOrder(editedOrder.id)
+            .orElseThrow { ResourceNotFoundException("Could not find order with id ${editedOrder.id}") }
+
+        orderToEdit.status = editedOrder.status
+        return repository.save(providerToModify)
     }
 
     private fun copyProvider(newProvider: ProviderEntity, dbProvider: ProviderEntity) {

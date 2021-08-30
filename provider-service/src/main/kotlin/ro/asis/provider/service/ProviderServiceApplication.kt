@@ -9,6 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient
     scanBasePackages = [
         "ro.asis.commons",
         "ro.asis.account.client",
+        "ro.asis.order.client",
         "ro.asis.provider"
     ]
 )
